@@ -12,7 +12,7 @@ justify-content: space-evenly;
 }
 .logo {
   width: 100px;
-  background: url("https://github.com/tentetmr/reading-log/img/logo.png") no-repeat center center;
+  background: url("https://tentetmr.github.io/reading-log/img/logo.png") no-repeat center center;
   background-size: contain;
 }
 .title {
