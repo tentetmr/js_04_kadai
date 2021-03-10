@@ -1,12 +1,12 @@
 // firebase
 var firebaseConfig = {
-  apiKey: "AIzaSyBKiMhgdldtZGiyYqoZrMok83S9LbjUXjM",
-  authDomain: "camp-08-7f5a0.firebaseapp.com",
-  databaseURL: "https://camp-08-7f5a0-default-rtdb.firebaseio.com",
-  projectId: "camp-08-7f5a0",
-  storageBucket: "camp-08-7f5a0.appspot.com",
-  messagingSenderId: "355626156848",
-  appId: "1:355626156848:web:a8c409709fd91b722d7ef5",
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
 };
 
 // Define a plugin to provide data labels
