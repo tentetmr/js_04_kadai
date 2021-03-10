@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Document</title>
+  </head>
+
+  <header>
+    <div class="logo"></div>
+    <div class="title">Reading Log</div>
+    <div id="auth"></div>
+  </header>
+
+  <body>
+    <main>
+      <form action="" class="form">
+          <div>
+            <input type="text" placeholder="Title" id="title" required />
+          </div>
+
+          <div>
+            <input type="text" placeholder="Author" id="author" required />
+          </div>
+
+          <div>
+            <input
+              type="text"
+              placeholder="Category (select)"
+              id="category"
+              list="categoryList"
+              required
+            />
+          </div>
+          <datalist id="categoryList">
+            <option value="Business"></option>
+            <option value="IT"></option>
+            <option value="Novels"></option>
+            <option value="Academics"></option>
+            <option value="Others"></option>
+          </datalist>
+
+          <div>
+            <input
+              type="number"
+              placeholder="Pages"
+              id="pages"
+              min="1"
+              required
+            />
+          </div>
+
+          <div>
+            <textarea
+              name=""
+              placeholder="Notes"
+              id="notes"
+              cols="30"
+              rows="10"
+            ></textarea>
+          </div>
+          <div>
+            <button id="send" class="btn">Send</button>
+          </div>
+      </form>
+
+      <canvas id="myChart"></canvas>
+
+      <div class="tableWrap scrolly">
+        <table id="table">
+          <thead>
+            <tr class="tableContents">
+              <th>Date</th>
+              <th>Category</th>
+              <th>Pages</th>
+            </tr>
+          </thead>
+          <tbody id="tbody" class="tableContents"></tbody>
+        </table>
+      </div>
+      <div class="outputWrap scrolly">
+        <div id="output"></div>
+      </div>
+    </main>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <!-- firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase.js"></script>
+    <!-- app.js -->
+    <script src="/js/app.js"></script>
+  </body>
+</html>
