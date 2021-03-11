@@ -9,17 +9,15 @@ var firebaseConfig = {
   appId: "",
 };
 
-// Define a plugin to provide data labels
+// Chart.js プラグイン（データラベル追加）
 Chart.plugins.register({
   afterDatasetsDraw: function (chart, easing) {
-    // To only draw at the end of animation, check for easing === 1
     var ctx = chart.ctx;
 
     chart.data.datasets.forEach(function (dataset, i) {
       var meta = chart.getDatasetMeta(i);
       if (!meta.hidden) {
         meta.data.forEach(function (element, index) {
-          // Draw the text in black, with the specified font
           ctx.fillStyle = "#eeeeee";
 
           var fontSize = 16;
@@ -27,10 +25,8 @@ Chart.plugins.register({
           var fontFamily = "'Comfortaa', cursive";
           ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
 
-          // Just naively convert to string for now
           var dataString = dataset.data[index].toString();
 
-          // Make sure alignment settings are correct
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
 
@@ -47,8 +43,11 @@ Chart.plugins.register({
   },
 });
 
+// firebase初期化
 firebase.initializeApp(firebaseConfig);
 
+// firebase Auth
+// ログイン時
 var provider = new firebase.auth.GoogleAuthProvider();
 function signIn() {
   firebase
@@ -66,6 +65,7 @@ function signIn() {
       console.log(signinError);
     });
 }
+// ログアウト時
 function signOut() {
   firebase.auth().onAuthStateChanged((user) => {
     firebase
@@ -80,26 +80,32 @@ function signOut() {
       });
   });
 }
+// ログイン判定
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     const signOutMessage = `
           <p>Hello, ${user.displayName}!<\/p>
-          <button class="btn btn-primary" type="submit"  onClick="signOut()">Logout<\/button>
+          <button class="btn btnPrimary" type="submit"  onClick="signOut()">Logout<\/button>
           `;
     $("#auth").html(signOutMessage);
+
     console.log("ログインしています");
   } else {
     const signInMessage = `
     <p>Hello, Guest!<\/p>
-    <button class="btn btn-primary" type="submit"  onClick="signIn()">Login<\/button>
+    <button class="btn btnPrimary" type="submit"  onClick="signIn()">Login<\/button>
             `;
     document.getElementById("auth").innerHTML = signInMessage;
   }
 });
+
+// リアルタイム通信
 const newPostRef = firebase.database().ref();
 
+// 日付取得用
 var now = new Date();
 
+// 読書データ送信
 $("#send").on("click", function () {
   newPostRef.push({
     title: $("#title").val(),
@@ -122,23 +128,38 @@ $("#send").on("click", function () {
   $("#notes").val(""); //空にする
 });
 
-var pageBiz = 0;
-var pageIT = 0;
-var pageNov = 0;
-var pageAca = 0;
-var pageOther = 0;
+// 必須項目入力しない限りSend押せない
+$(function () {
+  $("#send").prop("disabled", true);
+  $("form input:required").change(function () {
+    let flag = true;
+    $("form input:required").each(function (e) {
+      if ($("form input:required").eq(e).val() === "") {
+        flag = false;
+      }
+    });
+    if (flag) {
+      $("#send").prop("disabled", false);
+    } else {
+      $("#send").prop("disabled", true);
+    }
+  });
+});
 
+// 読書量初期化
+var pageBisuiness = 0;
+var pageIT = 0;
+var pageNovels = 0;
+var pageAcademics = 0;
+var pageOthers = 0;
+
+// データ取得、表示
 newPostRef.on("child_added", function (data) {
   let v = data.val();
-  // let k = data.key;
-
-  // グラフ用の配列作成
+  let k = data.key;
+  // 配列作成
   var readingData = [];
-
   readingData.push({ date: v.date, category: v.category, page: v.pages });
-
-
-
   // テーブルを作成（データの数だけ繰り返し）
   for (var i = 0; i < readingData.length; ++i) {
     var readingDatum = readingData[i];
@@ -146,45 +167,29 @@ newPostRef.on("child_added", function (data) {
       `<tr><td>${readingDatum.date}</td><td>${readingDatum.category}</td><td>${readingDatum.page}<br></td></tr>`
     );
     $("#output").prepend(`
-    <div class=outputContent><a>${readingDatum.date}<br>${readingDatum.title} ${readingDatum.author} ${readingDatum.category}<br>${readingDatum.page} pages<br>${readingDatum.impression}</a></div>
-    `
-      );
-    
+    <div class=outputContent>
+    <a>${readingDatum.date}<br>${readingDatum.title} ${readingDatum.author} ${readingDatum.category}<br>${readingDatum.page} pages<br>${readingDatum.impression}<br></a>
+    </div>
+    `);
   }
-  // let readingTotal = 0;
-  // let readingArray = [];
-  // if (readingDatum.category === "Business") {
-  //   for (var i = 0; i < readingData.length; ++i) {
-  //     readingTotal += Number(readingDatum.page);
-  //     readingArray.concat(readingTotal);
-
-  //   }
-  //   console.log(readingArray);
-  // }
-
+  // ページ数更新
   if (readingDatum.category === "Business") {
-    pageBiz += readingDatum.page;
+    pageBisuiness += readingDatum.page;
   } else if (readingDatum.category === "IT") {
     pageIT += readingDatum.page;
   } else if (readingDatum.category === "Novels") {
-    pageNov += readingDatum.page;
+    pageNovels += readingDatum.page;
   } else if (readingDatum.category === "Academics") {
-    pageAca += readingDatum.page;
-  } //その他
-  else {
-    pageOther += readingDatum.page;
+    pageAcademics += readingDatum.page;
+  } else {
+    pageOthers += readingDatum.page;
   }
-  console.log(pageOther);
-
+  // グラフ作成
   var ctx = $("#myChart");
-  if (myBarChart) {
-    myBarChart.destroy();
-  }
-
   var myBarChart = new Chart(ctx, {
     type: "pie",
     data: {
-      labels: ["Business", "IT", "Novels", "Academics", "Others"], //v.categoryに登録したカテゴリーを並べたい
+      labels: ["Business", "IT", "Novels", "Academics", "Others"],
       datasets: [
         {
           backgroundColor: [
@@ -194,15 +199,14 @@ newPostRef.on("child_added", function (data) {
             "#f3d394",
             "#e9a264",
           ],
-          data: [pageBiz, pageIT, pageNov, pageAca, pageOther], //カテゴリ別の集計データを置きたい
+          data: [pageBisuiness, pageIT, pageNovels, pageAcademics, pageOthers],
         },
       ],
     },
     options: {
       title: {
         display: true,
-        //グラフタイトル
-        text: "Category",
+        text: "How many pages you read?",
       },
     },
   });
