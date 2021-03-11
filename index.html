@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://tentetmr.github.io/reading-log/css/style.css" />
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -19,7 +17,9 @@
       rel="stylesheet"
       href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css"
     />
-    <title>Document</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://tentetmr.github.io/reading-log/css/style.css" />
+    <title>Reading Log</title>
   </head>
 
   <header>
@@ -29,63 +29,65 @@
   </header>
 
   <body>
-    <main>
-      <form action="" class="form">
-          <div>
-            <input type="text" placeholder="Title" id="title" required />
-          </div>
+    <div class="main">
+      <form action="" method="POST" class="form">
+        <div>
+          <input type="text" placeholder="*Title" id="title" required />
+        </div>
 
-          <div>
-            <input type="text" placeholder="Author" id="author" required />
-          </div>
+        <div>
+          <input type="text" placeholder="*Author" id="author" required />
+        </div>
 
-          <div>
-            <input
-              type="text"
-              placeholder="Category (select)"
-              id="category"
-              list="categoryList"
-              required
-            />
-          </div>
-          <datalist id="categoryList">
-            <option value="Business"></option>
-            <option value="IT"></option>
-            <option value="Novels"></option>
-            <option value="Academics"></option>
-            <option value="Others"></option>
-          </datalist>
+        <div>
+          <input
+            type="text"
+            placeholder="*Category (select)"
+            id="category"
+            list="categoryList"
+            required
+          />
+        </div>
+        <datalist id="categoryList">
+          <option value=""></option>
+          <option value="Business"></option>
+          <option value="IT"></option>
+          <option value="Novels"></option>
+          <option value="Academics"></option>
+          <option value="Others"></option>
+        </datalist>
 
-          <div>
-            <input
-              type="number"
-              placeholder="Pages"
-              id="pages"
-              min="1"
-              required
-            />
-          </div>
+        <div>
+          <input
+            type="number"
+            placeholder="*Pages"
+            id="pages"
+            min="1"
+            required
+          />
+        </div>
 
-          <div>
-            <textarea
-              name=""
-              placeholder="Notes"
-              id="notes"
-              cols="30"
-              rows="10"
-            ></textarea>
-          </div>
-          <div>
-            <button id="send" class="btn">Send</button>
-          </div>
+        <div>
+          <textarea
+            name=""
+            placeholder="Notes"
+            id="notes"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+        <div class="attention">* required</div>
+        <div>
+          <button id="send" class="btn">Send</button>
+        </div>
       </form>
 
       <canvas id="myChart"></canvas>
 
       <div class="tableWrap scrolly">
-        <table id="table">
+        <table class="table">
           <thead>
-            <tr class="tableContents">
+            <tr>
               <th>Date</th>
               <th>Category</th>
               <th>Pages</th>
@@ -94,10 +96,12 @@
           <tbody id="tbody" class="tableContents"></tbody>
         </table>
       </div>
+
+      <div class="logs">Logs</div>
       <div class="outputWrap scrolly">
         <div id="output"></div>
       </div>
-    </main>
+    </div>
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Chart.js -->
